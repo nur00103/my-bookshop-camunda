@@ -1,6 +1,8 @@
 package com.example.bookshopapi.controller;
 
 //import com.example.bookshopapi.camunda.StartCamundaPost;
+import com.example.bookshopapi.camunda.StartCamundaPost;
+import com.example.bookshopapi.camunda.StartCamundaPut;
 import com.example.bookshopapi.dto.request.CustomerRequest;
 import com.example.bookshopapi.dto.response.CustomerResponse;
 import com.example.bookshopapi.dto.response.ResponseModel;
@@ -22,7 +24,8 @@ public class CustomerController {
     private final CustomerService customerService;
 
     private final StartCamundaGetAll startCamunda;
-//    private final StartCamundaPost startCamundaPost;
+    private final StartCamundaPost startCamundaPost;
+    private final StartCamundaPut startCamundaPut;
 
 //    @Value("${bpmnName.value}")
 //    private final String bpmnName;
@@ -32,23 +35,20 @@ public class CustomerController {
     public ResponseModel<List<CustomerResponse>> getAllCustomer(){
         return startCamunda.startBpmnGetAll("getCustomer");
     }
-//    @PostMapping("/add")
-//    public ResponseModel<CustomerResponse> addCustomer(@RequestBody @Valid CustomerRequest customerRequest){
-//        return startCamundaPost.startBpmnPost("postCustomer",customerRequest);
-//    }
-
-
-
+    @PostMapping("/add")
+    public ResponseModel<CustomerResponse> addCustomer(@RequestBody @Valid CustomerRequest customerRequest){
+        return startCamundaPost.startBpmnPost("postCustomer",customerRequest);
+    }
+    @PutMapping("/{customerId}")
+    public ResponseModel<CustomerResponse> updateCustomer(@PathVariable @Valid Long customerId
+            ,@RequestBody @Valid CustomerRequest customerRequest){
+        return startCamundaPut.startBpmnPut("putCustomer",customerId,customerRequest);
+    }
     @GetMapping("/{customerId}")
     public ResponseModel<CustomerResponse> getCustomerById(@PathVariable @Valid Long customerId){
         return customerService.getCustomerById(customerId);
     }
 
-    @PutMapping("/{customerId}")
-    public ResponseModel<CustomerResponse> updateCustomer(@PathVariable @Valid Long customerId
-            ,@RequestBody @Valid CustomerRequest customerRequest){
-        return customerService.updateCustomer(customerId,customerRequest);
-    }
     @DeleteMapping("/{customerId}")
     public ResponseModel<CustomerResponse> deleteCustomer(@PathVariable @Valid Long customerId){
         return customerService.deleteCustomer(customerId);

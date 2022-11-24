@@ -16,4 +16,6 @@ public interface CustomerService {
     ResponseModel<CustomerResponse> updateCustomer(Long customerId, CustomerRequest customerRequest);
 
     ResponseModel<CustomerResponse> deleteCustomer(Long customerId);
+
+    public boolean checkCustomerData(Long customerId, CustomerRequest customerRequest);
 }

@@ -18,6 +18,7 @@ public class ExceptionController {
         return ResponseModel.<CustomerResponse>builder().status(myException.getMessage())
                 .code(myException.getCode()).result(null).error(true).build();
     }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public  ResponseModel<CustomerResponse> expReq(MethodArgumentTypeMismatchException e){
