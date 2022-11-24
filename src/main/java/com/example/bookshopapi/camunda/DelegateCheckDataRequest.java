@@ -6,12 +6,12 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 
-@Component("delegatePutCustomer")
-public class DelegatePutCustomer implements JavaDelegate {
+@Component("delegateCheckDataRequest")
+public class DelegateCheckDataRequest implements JavaDelegate {
 
     private final CustomerService customerService;
 
-    public DelegatePutCustomer(CustomerService customerService) {
+    public DelegateCheckDataRequest(CustomerService customerService) {
         this.customerService = customerService;
     }
 
@@ -25,7 +25,6 @@ public class DelegatePutCustomer implements JavaDelegate {
         customerRequest.setEmail((String) delegateExecution.getVariable("email"));
         customerRequest.setPhone((String) delegateExecution.getVariable("phone"));
         customerRequest.setAddress((String) delegateExecution.getVariable("address"));
-        Long customerId= (Long) delegateExecution.getVariable("customerId");
-        delegateExecution.setVariable("putCustomerDa",customerService.updateCustomer(customerId,customerRequest));
+        delegateExecution.setVariable("checkDataRequest",customerService.checkCustomerDataRequest(customerRequest));
     }
 }

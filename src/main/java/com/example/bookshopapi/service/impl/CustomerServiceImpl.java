@@ -48,9 +48,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseModel<CustomerResponse> addCustomer(CustomerRequest customerRequest) {
-        if (customerRequest==null){
-            throw new MyException(ExceptionEnum.BAD_REQUEST);
-        }Customer customer=requestToEntity(customerRequest);
+        Customer customer=requestToEntity(customerRequest);
         Customer savedCustomer=customerRepository.save(customer);
         CustomerResponse customerResponse=convertToResponse(customer);
         return ResponseModel.<CustomerResponse>builder().result(customerResponse).error(false)
@@ -71,13 +69,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
        public boolean checkCustomerData(Long customerId, CustomerRequest customerRequest){
            if (customerRequest==null){
-               throw new MyException(ExceptionEnum.BAD_REQUEST);
+               return false;
            }else if (!customerRepository.findById(customerId).isPresent()){
-               throw new MyException(ExceptionEnum.USER_NOT_FOUND);
+               return false;
            }else {
                return true;
            }
        }
+
+    @Override
+    public boolean checkCustomerDataRequest(CustomerRequest customerRequest) {
+        if (customerRequest==null){
+            return false;
+        }else {
+            return true;
+        }
+    }
 
 
     @Override

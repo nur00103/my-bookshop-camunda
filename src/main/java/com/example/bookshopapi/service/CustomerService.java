@@ -18,4 +18,6 @@ public interface CustomerService {
     ResponseModel<CustomerResponse> deleteCustomer(Long customerId);
 
     public boolean checkCustomerData(Long customerId, CustomerRequest customerRequest);
+
+    public boolean checkCustomerDataRequest(CustomerRequest customerRequest);
 }
