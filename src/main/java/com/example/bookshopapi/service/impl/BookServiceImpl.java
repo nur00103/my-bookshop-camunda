@@ -90,6 +90,21 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    public boolean checkBookRequest(BookRequest bookRequest){
+        if (bookRequest==null){
+            return false;
+        }else {
+            return true;
+        }
+    }
+    public boolean checkBookById(Long bookId){
+        if (!bookRepository.findById(bookId).isPresent()){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     @Override
     public ResponseModel<BookResponse> updateBook(Long bookId, BookRequest bookRequest) {
         if (bookRequest==null){
@@ -102,9 +117,6 @@ public class BookServiceImpl implements BookService {
         Type type=null;
         Language language=null;
         PublishingHouse publishingHouse=null;
-        if (bookRequest==null){
-            throw new MyException(ExceptionEnum.BAD_REQUEST);
-        }
         if (authorRepository.findByAuthor(bookRequest.getAuthor().getAuthor())==null){
             Author author1=new Author();
             author1.setAuthor(bookRequest.getAuthor().getAuthor());

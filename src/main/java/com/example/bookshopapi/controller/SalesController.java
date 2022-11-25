@@ -1,5 +1,6 @@
 package com.example.bookshopapi.controller;
 
+import com.example.bookshopapi.camunda.sales.StartCamundaSalesPost;
 import com.example.bookshopapi.dto.request.SalesRequest;
 import com.example.bookshopapi.dto.response.ResponseModel;
 import com.example.bookshopapi.dto.response.SalesResponse;
@@ -16,6 +17,7 @@ import java.util.List;
 public class SalesController {
 
     private final SalesService salesService;
+    private final StartCamundaSalesPost startCamundaSalesPost;
 
     @GetMapping
     public ResponseModel<List<SalesResponse>> getAllSales(){
@@ -27,7 +29,7 @@ public class SalesController {
     }
     @PostMapping("save")
     public ResponseModel<SalesResponse> saveSales(@Valid @RequestBody SalesRequest salesRequest) {
-        return salesService.saveSales(salesRequest);
+        return startCamundaSalesPost.startCamundaSalesPost("addSales",salesRequest);
     }
     @DeleteMapping("/{salesId}")
     public ResponseModel<SalesResponse> deleteSales(@PathVariable @Valid Long salesId){

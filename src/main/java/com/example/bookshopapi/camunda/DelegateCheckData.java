@@ -26,6 +26,7 @@ public class DelegateCheckData implements JavaDelegate {
         customerRequest.setPhone((String) delegateExecution.getVariable("phone"));
         customerRequest.setAddress((String) delegateExecution.getVariable("address"));
         Long customerId= (Long) delegateExecution.getVariable("customerId");
-        delegateExecution.setVariable("checkData",customerService.checkCustomerData(customerId,customerRequest));
+        Boolean test=customerService.checkCustomerData(customerId,customerRequest);
+        delegateExecution.setVariable("checkData",test);
     }
 }

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1dvttof" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="addSales" name="addSales" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1slhzck</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1slhzck" sourceRef="StartEvent_1" targetRef="checkSalesRequest" />
+    <bpmn:serviceTask id="checkSalesRequest" name="checkSalesRequest" camunda:delegateExpression="${delegateCheckSalesRequest}">
+      <bpmn:incoming>Flow_1slhzck</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tl012n</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0emhh3z" default="Flow_1t8lwad">
+      <bpmn:incoming>Flow_0tl012n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q0p3ns</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1t8lwad</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0tl012n" sourceRef="checkSalesRequest" targetRef="Gateway_0emhh3z" />
+    <bpmn:sequenceFlow id="Flow_0q0p3ns" sourceRef="Gateway_0emhh3z" targetRef="checkCustomerDataService">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkSalesData}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1t8lwad" sourceRef="Gateway_0emhh3z" targetRef="Event_06ckq6o" />
+    <bpmn:endEvent id="Event_06ckq6o">
+      <bpmn:incoming>Flow_1t8lwad</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0kqd0en" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="checkCustomerDataService" name="checkCustomerDataService" camunda:delegateExpression="${delegateCheckCustomerData}">
+      <bpmn:incoming>Flow_0q0p3ns</bpmn:incoming>
+      <bpmn:outgoing>Flow_148brli</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0562nis" default="Flow_0x6eqau">
+      <bpmn:incoming>Flow_148brli</bpmn:incoming>
+      <bpmn:outgoing>Flow_0miy9om</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0x6eqau</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_148brli" sourceRef="checkCustomerDataService" targetRef="Gateway_0562nis" />
+    <bpmn:sequenceFlow id="Flow_0miy9om" sourceRef="Gateway_0562nis" targetRef="checkBookDataService">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkCustomerData}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0x6eqau" sourceRef="Gateway_0562nis" targetRef="Event_0xp3v7c" />
+    <bpmn:endEvent id="Event_0xp3v7c">
+      <bpmn:incoming>Flow_0x6eqau</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0c11p1c" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="checkBookDataService" name="checkBookDataService" camunda:delegateExpression="${delegateCheckBookData}">
+      <bpmn:incoming>Flow_0miy9om</bpmn:incoming>
+      <bpmn:outgoing>Flow_1w8dx2r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_19m1xu1" default="Flow_1ka42fd">
+      <bpmn:incoming>Flow_1w8dx2r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lxuwjm</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1ka42fd</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1w8dx2r" sourceRef="checkBookDataService" targetRef="Gateway_19m1xu1" />
+    <bpmn:sequenceFlow id="Flow_1lxuwjm" sourceRef="Gateway_19m1xu1" targetRef="saveSales">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkBookData}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ka42fd" sourceRef="Gateway_19m1xu1" targetRef="Event_0wvyvew" />
+    <bpmn:endEvent id="Event_0wvyvew">
+      <bpmn:incoming>Flow_1ka42fd</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1cnw899" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="saveSales" name="saveSales" camunda:delegateExpression="${delegateSaveSales}">
+      <bpmn:incoming>Flow_1lxuwjm</bpmn:incoming>
+      <bpmn:outgoing>Flow_1u4zunf</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0zjqmb4">
+      <bpmn:incoming>Flow_1u4zunf</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1u4zunf" sourceRef="saveSales" targetRef="Event_0zjqmb4" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="addSales">
+      <bpmndi:BPMNShape id="Activity_1oe08s6_di" bpmnElement="checkSalesRequest">
+        <dc:Bounds x="160" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0emhh3z_di" bpmnElement="Gateway_0emhh3z" isMarkerVisible="true">
+        <dc:Bounds x="315" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="364" y="282" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14zcilw_di" bpmnElement="Event_06ckq6o">
+        <dc:Bounds x="322" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0svcen9_di" bpmnElement="checkCustomerDataService">
+        <dc:Bounds x="420" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0562nis_di" bpmnElement="Gateway_0562nis" isMarkerVisible="true">
+        <dc:Bounds x="575" y="225" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1j3z6cp_di" bpmnElement="Event_0xp3v7c">
+        <dc:Bounds x="582" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ngy0y4_di" bpmnElement="checkBookDataService">
+        <dc:Bounds x="680" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_19m1xu1_di" bpmnElement="Gateway_19m1xu1" isMarkerVisible="true">
+        <dc:Bounds x="835" y="225" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="192" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0tyonya_di" bpmnElement="Event_0wvyvew">
+        <dc:Bounds x="842" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1udeb63_di" bpmnElement="saveSales">
+        <dc:Bounds x="940" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0zjqmb4_di" bpmnElement="Event_0zjqmb4">
+        <dc:Bounds x="972" y="132" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1slhzck_di" bpmnElement="Flow_1slhzck">
+        <di:waypoint x="210" y="118" />
+        <di:waypoint x="210" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tl012n_di" bpmnElement="Flow_0tl012n">
+        <di:waypoint x="260" y="250" />
+        <di:waypoint x="315" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0q0p3ns_di" bpmnElement="Flow_0q0p3ns">
+        <di:waypoint x="365" y="250" />
+        <di:waypoint x="420" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1t8lwad_di" bpmnElement="Flow_1t8lwad">
+        <di:waypoint x="340" y="225" />
+        <di:waypoint x="340" y="168" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_148brli_di" bpmnElement="Flow_148brli">
+        <di:waypoint x="520" y="250" />
+        <di:waypoint x="575" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0miy9om_di" bpmnElement="Flow_0miy9om">
+        <di:waypoint x="625" y="250" />
+        <di:waypoint x="680" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x6eqau_di" bpmnElement="Flow_0x6eqau">
+        <di:waypoint x="600" y="225" />
+        <di:waypoint x="600" y="168" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1w8dx2r_di" bpmnElement="Flow_1w8dx2r">
+        <di:waypoint x="780" y="250" />
+        <di:waypoint x="835" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lxuwjm_di" bpmnElement="Flow_1lxuwjm">
+        <di:waypoint x="885" y="250" />
+        <di:waypoint x="940" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ka42fd_di" bpmnElement="Flow_1ka42fd">
+        <di:waypoint x="860" y="225" />
+        <di:waypoint x="860" y="168" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u4zunf_di" bpmnElement="Flow_1u4zunf">
+        <di:waypoint x="990" y="210" />
+        <di:waypoint x="990" y="168" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,5 +1,6 @@
 package com.example.bookshopapi.service;
 
+import com.example.bookshopapi.dto.request.BookRequest;
 import com.example.bookshopapi.dto.request.SalesRequest;
 import com.example.bookshopapi.dto.response.ResponseModel;
 import com.example.bookshopapi.dto.response.SalesResponse;
@@ -16,4 +17,8 @@ public interface SalesService {
     ResponseModel<SalesResponse> deleteSales(Long salesId);
 
     ResponseModel<SalesResponse> updateSales(Long salesId, SalesRequest salesRequest);
+
+    public boolean checkRequest(SalesRequest salesRequest);
+    public boolean checkCustomer (SalesRequest salesRequest);
+    public  boolean checkBook(SalesRequest salesRequest);
 }

@@ -46,9 +46,6 @@ public class SalesServiceImpl implements SalesService {
 
     @Override
     public ResponseModel<SalesResponse> saveSales(SalesRequest salesRequest) {
-        if (salesRequest==null){
-            throw new MyException(ExceptionEnum.BAD_REQUEST);
-        }
         Sales sales=new Sales();
         Customer customer=customerRepository.findById(salesRequest.getCustomer()).get();
         Book book=bookRepository.findById(salesRequest.getBook()).get();
@@ -61,6 +58,31 @@ public class SalesServiceImpl implements SalesService {
         return ResponseModel.<SalesResponse>builder().result(salesResponse).error(false)
                 .code(ExceptionEnum.SUCCESS.getCode()).status(ExceptionEnum.SUCCESS.getMessage()).build();
     }
+    @Override
+    public boolean checkRequest(SalesRequest salesRequest){
+        if (salesRequest==null || salesRequest.getQuantity()<=0 || salesRequest.getAmount()<=0){
+            return false;
+        }else {
+            return true;
+        }
+    }
+    @Override
+    public boolean checkCustomer (SalesRequest salesRequest){
+        if (customerRepository.findById(salesRequest.getCustomer()).isPresent()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    @Override
+    public  boolean checkBook(SalesRequest salesRequest){
+        if (bookRepository.findById(salesRequest.getBook()).isPresent()){
+            return  true;
+        }else {
+            return false;
+        }
+    }
+
 
     @Override
     public ResponseModel<SalesResponse> deleteSales(Long salesId) {
